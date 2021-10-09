@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
 #
-# Makefile for building native ni-neutrino and ni-libstb-hal
+# Makefile for building native neutrino and libstb-hal
 #
 # (C) 2012,2013 Stefan Seyfried
 # (C) 2015 Sven Hoefer
@@ -22,7 +22,6 @@
 #
 # apt-get install libavformat-dev
 # apt-get install libswscale-dev
-# echo "deb http://www.deb-multimedia.org jessie main non-free" >> /etc/apt/sources.list
 # apt-get install deb-multimedia-keyring
 # apt-get install libswresample-dev
 # apt-get install libopenthreads-dev
@@ -40,7 +39,7 @@
 # apt-get install libflac-dev
 # apt-get install libgstreamer1.0-dev
 # apt-get install libgstreamer-plugins-base1.0-dev
-#
+# apt-get install libgstreamer-plugins-bad1.0-dev
 # -----------------------------------------------------------------------------
 # init
 init:
@@ -145,12 +144,12 @@ endif
 
 BOXMODEL ?= generic
 
-NEUTRINO ?= ni-neutrino
+NEUTRINO ?= gui-neutrino
 N_BRANCH ?= master
-N_URL ?= https://bitbucket.org/neutrino-images/ni-neutrino.git
-LIBSTB-HAL ?= ni-libstb-hal
-LH_BRANCH ?= master
-HAL_URL ?= https://bitbucket.org/neutrino-images/ni-libstb-hal.git
+N_URL ?= https://github.com/tuxbox-neutrino/$(NEUTRINO).git
+LIBSTB-HAL ?= library-stb-hal
+LH_BRANCH ?= mpx
+HAL_URL ?= https://github.com/tuxbox-neutrino/$(LIBSTB-HAL).git
 
 SOURCE = $(PWD)/../source
 ifeq ($(wildcard $(SOURCE)),)
@@ -271,7 +270,7 @@ $(LH_OBJ)/config.status: | $(LH_OBJ) $(LH_SRC)
 			$(if $(filter $(BOXMODEL), raspi),--with-boxmodel=raspi) \
 			--enable-maintainer-mode \
 			--enable-shared=no \
-			$(if $(filter $(FLAVOUR), ni),--enable-gstreamer_10=yes) \
+			$(if $(filter $(FLAVOUR), ni ddt),--enable-gstreamer_10=yes) \
 			;
 
 # -----------------------------------------------------------------------------
