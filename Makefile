@@ -51,8 +51,7 @@ init:
 	@echo "	4) tangos"
 	@echo "	5) ni"
 	@echo "	6) vanilla"
-	@echo "	7)franken"
-	@read -p "Select neutrino(1-7)?" FLAVOUR; \
+	@read -p "Select neutrino(1-6)?" FLAVOUR; \
 	FLAVOUR=$${FLAVOUR}; \
 	case "$$FLAVOUR" in \
 		1) FLAVOUR="tuxbox";; \
@@ -61,7 +60,6 @@ init:
 		4) FLAVOUR="tangos";; \
 		5) FLAVOUR="ni";; \
 		6) FLAVOUR="vanilla";; \
-		7) FLAVOUR="franken";; \
 		*) FLAVOUR="tuxbox";; \
 	esac; \
 	echo "FLAVOUR=$$FLAVOUR" > config.local
@@ -73,8 +71,7 @@ init:
 	@echo "	4) tangos"
 	@echo "	5) ni"
 	@echo "	6)vanilla"
-	@echo "	7)franken"
-	@read -p "Select libstb-hal(1-7)?" HAL; \
+	@read -p "Select libstb-hal(1-6)?" HAL; \
 	HAL=$${HAL}; \
 	case "$$HAL" in \
 		1) HAL="tuxbox";; \
@@ -83,7 +80,6 @@ init:
 		4) HAL="tangos";; \
 		5) HAL="ni";; \
 		6) HAL="vanilla";; \
-		7) HAL="franken";; \
 		*) HAL="tuxbox";; \
 	esac; \
 	echo "HAL=$$HAL" >> config.local
@@ -167,19 +163,6 @@ ifeq ($(HAL), vanilla)
 LIBSTB-HAL = libstb-hal
 LH_BRANCH = master
 HAL_URL = https://github.com/neutrino-mp/$(LIBSTB-HAL).git	
-endif
-
-# franken
-ifeq ($(FLAVOUR), franken)
-NEUTRINO = neutrino-mp-fs
-N_BRANCH = master
-N_URL = https://github.com/fs-basis/$(NEUTRINO).git
-endif
-
-ifeq ($(HAL), franken)
-LIBSTB-HAL = libstb-hal-fs
-LH_BRANCH = master
-HAL_URL = https://github.com/fs-basis/$(LIBSTB-HAL).git	
 endif
 
 #
