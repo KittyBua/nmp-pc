@@ -64,26 +64,6 @@ init:
 	esac; \
 	echo "FLAVOUR=$$FLAVOUR" > config.local
 	@echo ""
-	@echo "Select libstb-hal"
-	@echo "	1) tuxbox"
-	@echo "	2) ddt"
-	@echo "	3) max"
-	@echo "	4) tangos"
-	@echo "	5) ni"
-	@echo "	6)vanilla"
-	@read -p "Select libstb-hal(1-6)?" HAL; \
-	HAL=$${HAL}; \
-	case "$$HAL" in \
-		1) HAL="tuxbox";; \
-		2) HAL="ddt";; \
-		3) HAL="max";;\
-		4) HAL="tangos";; \
-		5) HAL="ni";; \
-		6) HAL="vanilla";; \
-		*) HAL="tuxbox";; \
-	esac; \
-	echo "HAL=$$HAL" >> config.local
-	@echo ""
 
 -include config.local
 
@@ -92,9 +72,6 @@ ifeq ($(FLAVOUR), tuxbox)
 NEUTRINO = gui-neutrino
 N_BRANCH = master
 N_URL = https://github.com/tuxbox-neutrino/$(NEUTRINO).git
-endif
-
-ifeq ($(HAL), tuxbox)
 LIBSTB-HAL = library-stb-hal
 LH_BRANCH = mpx
 HAL_URL = https://github.com/tuxbox-neutrino/$(LIBSTB-HAL).git	
@@ -105,9 +82,6 @@ ifeq ($(FLAVOUR), ddt)
 NEUTRINO = neutrino-ddt
 N_BRANCH = master
 N_URL = https://github.com/Duckbox-Developers/$(NEUTRINO).git
-endif
-
-ifeq ($(HAL), ddt)
 LIBSTB-HAL = libstb-hal-ddt
 LH_BRANCH = master
 HAL_URL = https://github.com/Duckbox-Developers/$(LIBSTB-HAL).git	
@@ -118,9 +92,6 @@ ifeq ($(FLAVOUR), max)
 NEUTRINO = neutrino-max
 N_BRANCH = master
 N_URL = https://github.com/MaxWiesel/$(NEUTRINO).git
-endif
-
-ifeq ($(HAL), max)
 LIBSTB-HAL = libstb-hal-max
 LH_BRANCH = master
 HAL_URL = https://github.com/MaxWiesel/$(LIBSTB-HAL).git	
@@ -131,9 +102,6 @@ ifeq ($(FLAVOUR), tangos)
 NEUTRINO = neutrino-tangos
 N_BRANCH = master
 N_URL = https://github.com/TangoCash/$(NEUTRINO).git
-endif
-
-ifeq ($(HAL), tangos)
 LIBSTB-HAL = libstb-hal-tangos
 LH_BRANCH = master
 HAL_URL = https://github.com/TangoCash/$(LIBSTB-HAL).git	
@@ -144,9 +112,6 @@ ifeq ($(FLAVOUR), ni)
 NEUTRINO = ni-neutrino
 N_BRANCH = master
 N_URL = https://bitbucket.org/neutrino-images/$(NEUTRINO).git
-endif
-
-ifeq ($(HAL), ni)
 LIBSTB-HAL = ni-libstb-hal
 LH_BRANCH = master
 HAL_URL = https://bitbucket.org/neutrino-images/$(LIBSTB-HAL).git	
@@ -157,9 +122,6 @@ ifeq ($(FLAVOUR), vanilla)
 NEUTRINO = neutrino-mp
 N_BRANCH = master
 N_URL = https://github.com/$(NEUTRINO)/$(NEUTRINO).git
-endif
-
-ifeq ($(HAL), vanilla)
 LIBSTB-HAL = libstb-hal
 LH_BRANCH = master
 HAL_URL = https://github.com/neutrino-mp/$(LIBSTB-HAL).git	
@@ -293,7 +255,7 @@ $(LH_OBJ)/config.status: | $(LH_OBJ) $(LH_SRC)
 			$(if $(filter $(BOXMODEL), raspi),--with-boxmodel=raspi) \
 			--enable-maintainer-mode \
 			--enable-shared=no \
-			$(if $(filter $(FLAVOUR), ni ddt),--enable-gstreamer_10=yes) \
+			$(if $(filter $(FLAVOUR), ni ddt tuxbox),--enable-gstreamer_10=yes) \
 			;
 
 # -----------------------------------------------------------------------------
