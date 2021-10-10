@@ -40,41 +40,50 @@
 # apt-get install libgstreamer1.0-dev
 # apt-get install libgstreamer-plugins-base1.0-dev
 # apt-get install libgstreamer-plugins-bad1.0-dev
+# apt-get install clutter-1.0
 # -----------------------------------------------------------------------------
 # init
 init:
 	@echo "Select neutrino"
-	@echo "	1) ni"
-	@echo "	2) tuxbox"
-	@echo "	3) ddt"
+	@echo "	1) tuxbox"
+	@echo "	2) ddt"
+	@echo "	3) max"
 	@echo "	4) tangos"
-	@echo "	5) max"
-	@read -p "Select neutrino(1-5)?" FLAVOUR; \
+	@echo "	5) ni"
+	@echo "	6) vanilla"
+	@echo "	7)franken"
+	@read -p "Select neutrino(1-7)?" FLAVOUR; \
 	FLAVOUR=$${FLAVOUR}; \
 	case "$$FLAVOUR" in \
-		1) FLAVOUR="ni";; \
-		2) FLAVOUR="tuxbox";; \
-		3) FLAVOUR="ddt";;\
+		1) FLAVOUR="tuxbox";; \
+		2) FLAVOUR="ddt";; \
+		3) FLAVOUR="max";;\
 		4) FLAVOUR="tangos";; \
-		5) FLAVOUR="max";; \
+		5) FLAVOUR="ni";; \
+		6) FLAVOUR="vanilla";; \
+		7) FLAVOUR="franken";; \
 		*) FLAVOUR="tuxbox";; \
 	esac; \
 	echo "FLAVOUR=$$FLAVOUR" > config.local
 	@echo ""
 	@echo "Select libstb-hal"
-	@echo "	1) ni"
-	@echo "	2) tuxbox"
-	@echo "	3) ddt"
+	@echo "	1) tuxbox"
+	@echo "	2) ddt"
+	@echo "	3) max"
 	@echo "	4) tangos"
-	@echo "	5) max"
-	@read -p "Select libstb-hal(1-5)?" HAL; \
+	@echo "	5) ni"
+	@echo "	6)vanilla"
+	@echo "	7)franken"
+	@read -p "Select libstb-hal(1-7)?" HAL; \
 	HAL=$${HAL}; \
 	case "$$HAL" in \
-		1) HAL="ni";; \
-		2) HAL="tuxbox";; \
-		3) HAL="ddt";;\
+		1) HAL="tuxbox";; \
+		2) HAL="ddt";; \
+		3) HAL="max";;\
 		4) HAL="tangos";; \
-		5) HAL="max";; \
+		5) HAL="ni";; \
+		6) HAL="vanilla";; \
+		7) HAL="franken";; \
 		*) HAL="tuxbox";; \
 	esac; \
 	echo "HAL=$$HAL" >> config.local
@@ -82,18 +91,7 @@ init:
 
 -include config.local
 
-ifeq ($(FLAVOUR), ni)
-NEUTRINO = ni-neutrino
-N_BRANCH = master
-N_URL = https://bitbucket.org/neutrino-images/$(NEUTRINO).git
-endif
-
-ifeq ($(HAL), ni)
-LIBSTB-HAL = ni-libstb-hal
-LH_BRANCH = master
-HAL_URL = https://bitbucket.org/neutrino-images/$(LIBSTB-HAL).git	
-endif
-
+# tuxbox
 ifeq ($(FLAVOUR), tuxbox)
 NEUTRINO = gui-neutrino
 N_BRANCH = master
@@ -106,30 +104,7 @@ LH_BRANCH = mpx
 HAL_URL = https://github.com/tuxbox-neutrino/$(LIBSTB-HAL).git	
 endif
 
-ifeq ($(FLAVOUR), max)
-NEUTRINO = neutrino-max
-N_BRANCH = master
-N_URL = https://github.com/MaxWiesel/$(NEUTRINO).git
-endif
-
-ifeq ($(HAL), max)
-LIBSTB-HAL = libstb-hal-max
-LH_BRANCH = master
-HAL_URL = https://github.com/MaxWiesel/$(LIBSTB-HAL).git	
-endif
-
-ifeq ($(FLAVOUR), tangos)
-NEUTRINO = neutrino-tangos
-N_BRANCH = master
-N_URL = https://github.com/TangoCash/$(NEUTRINO).git
-endif
-
-ifeq ($(HAL), tangos)
-LIBSTB-HAL = libstb-hal-tangos
-LH_BRANCH = master
-HAL_URL = https://github.com/TangoCash/$(LIBSTB-HAL).git	
-endif
-
+# ddt
 ifeq ($(FLAVOUR), ddt)
 NEUTRINO = neutrino-ddt
 N_BRANCH = master
@@ -142,8 +117,75 @@ LH_BRANCH = master
 HAL_URL = https://github.com/Duckbox-Developers/$(LIBSTB-HAL).git	
 endif
 
+# max
+ifeq ($(FLAVOUR), max)
+NEUTRINO = neutrino-max
+N_BRANCH = master
+N_URL = https://github.com/MaxWiesel/$(NEUTRINO).git
+endif
+
+ifeq ($(HAL), max)
+LIBSTB-HAL = libstb-hal-max
+LH_BRANCH = master
+HAL_URL = https://github.com/MaxWiesel/$(LIBSTB-HAL).git	
+endif
+
+# tangos
+ifeq ($(FLAVOUR), tangos)
+NEUTRINO = neutrino-tangos
+N_BRANCH = master
+N_URL = https://github.com/TangoCash/$(NEUTRINO).git
+endif
+
+ifeq ($(HAL), tangos)
+LIBSTB-HAL = libstb-hal-tangos
+LH_BRANCH = master
+HAL_URL = https://github.com/TangoCash/$(LIBSTB-HAL).git	
+endif
+
+# ni
+ifeq ($(FLAVOUR), ni)
+NEUTRINO = ni-neutrino
+N_BRANCH = master
+N_URL = https://bitbucket.org/neutrino-images/$(NEUTRINO).git
+endif
+
+ifeq ($(HAL), ni)
+LIBSTB-HAL = ni-libstb-hal
+LH_BRANCH = master
+HAL_URL = https://bitbucket.org/neutrino-images/$(LIBSTB-HAL).git	
+endif
+
+# vanilla
+ifeq ($(FLAVOUR), vanilla)
+NEUTRINO = neutrino-mp
+N_BRANCH = master
+N_URL = https://github.com/$(NEUTRINO)/$(NEUTRINO).git
+endif
+
+ifeq ($(HAL), vanilla)
+LIBSTB-HAL = libstb-hal
+LH_BRANCH = master
+HAL_URL = https://github.com/neutrino-mp/$(LIBSTB-HAL).git	
+endif
+
+# franken
+ifeq ($(FLAVOUR), franken)
+NEUTRINO = neutrino-mp-fs
+N_BRANCH = master
+N_URL = https://github.com/fs-basis/$(NEUTRINO).git
+endif
+
+ifeq ($(HAL), franken)
+LIBSTB-HAL = libstb-hal-fs
+LH_BRANCH = master
+HAL_URL = https://github.com/fs-basis/$(LIBSTB-HAL).git	
+endif
+
+#
 BOXMODEL ?= generic
 
+#
 NEUTRINO ?= gui-neutrino
 N_BRANCH ?= master
 N_URL ?= https://github.com/tuxbox-neutrino/$(NEUTRINO).git
@@ -151,19 +193,17 @@ LIBSTB-HAL ?= library-stb-hal
 LH_BRANCH ?= mpx
 HAL_URL ?= https://github.com/tuxbox-neutrino/$(LIBSTB-HAL).git
 
-SOURCE = $(PWD)/../source
-ifeq ($(wildcard $(SOURCE)),)
-  SOURCE = $(PWD)/src
-endif
+#
 SRC = $(PWD)/src
 OBJ = $(PWD)/obj
 DEST = $(PWD)/root
 
-LH_SRC = $(SOURCE)/$(LIBSTB-HAL)
+LH_SRC = $(SRC)/$(LIBSTB-HAL)
 LH_OBJ = $(OBJ)/$(LIBSTB-HAL)
-N_SRC  = $(SOURCE)/$(NEUTRINO)
+N_SRC  = $(SRC)/$(NEUTRINO)
 N_OBJ  = $(OBJ)/$(NEUTRINO)
 
+#
 CFLAGS  = -W
 CFLAGS += -Wall
 #CFLAGS += -Werror
@@ -288,15 +328,15 @@ $(DEST):
 $(SRC):
 	mkdir -p $@
 
-$(N_SRC): | $(SOURCE)
-	cd $(SOURCE) && git clone $(N_URL)
+$(N_SRC): | $(SRC)
+	cd $(SRC) && git clone $(N_URL)
 
-$(LH_SRC): | $(SOURCE)
-	cd $(SOURCE) && git clone $(HAL_URL)
+$(LH_SRC): | $(SRC)
+	cd $(SRC) && git clone $(HAL_URL)
 
 # -----------------------------------------------------------------------------
 
-checkout: $(SOURCE)/$(LIBSTB-HAL) $(SOURCE)/$(NEUTRINO)
+checkout: $(SRC)/$(LIBSTB-HAL) $(SRC)/$(NEUTRINO)
 
 update: $(LH_SRC) $(N_SRC)
 	cd $(LH_SRC) && git pull
@@ -313,6 +353,7 @@ libstb-hal-clean:
 
 clean: neutrino-clean libstb-hal-clean
 	rm -rf $(OBJ)/*
+	rm -rf $(DEST)/var/tuxbox/config/neutrino.conf
 
 clean-all: clean
 	rm -rf $(DEST)
