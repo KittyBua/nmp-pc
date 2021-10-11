@@ -50,8 +50,7 @@ init:
 	@echo "	3) max"
 	@echo "	4) tangos"
 	@echo "	5) ni"
-	@echo "	6) vanilla"
-	@read -p "Select neutrino(1-6)?" FLAVOUR; \
+	@read -p "Select neutrino(1-5)?" FLAVOUR; \
 	FLAVOUR=$${FLAVOUR}; \
 	case "$$FLAVOUR" in \
 		1) FLAVOUR="tuxbox";; \
@@ -59,7 +58,6 @@ init:
 		3) FLAVOUR="max";;\
 		4) FLAVOUR="tangos";; \
 		5) FLAVOUR="ni";; \
-		6) FLAVOUR="vanilla";; \
 		*) FLAVOUR="tuxbox";; \
 	esac; \
 	echo "FLAVOUR=$$FLAVOUR" > config.local
@@ -71,60 +69,50 @@ init:
 ifeq ($(FLAVOUR), tuxbox)
 NEUTRINO = gui-neutrino
 N_BRANCH = master
-N_URL = https://github.com/tuxbox-neutrino/$(NEUTRINO).git
+N_URL = https://github.com/tuxbox-neutrino/gui-neutrino.git
 LIBSTB-HAL = library-stb-hal
 LH_BRANCH = mpx
-HAL_URL = https://github.com/tuxbox-neutrino/$(LIBSTB-HAL).git	
+HAL_URL = https://github.com/tuxbox-neutrino/library-stb-hal.git	
 endif
 
 # ddt
 ifeq ($(FLAVOUR), ddt)
 NEUTRINO = neutrino-ddt
 N_BRANCH = master
-N_URL = https://github.com/Duckbox-Developers/$(NEUTRINO).git
+N_URL = https://github.com/Duckbox-Developers/neutrino-ddt.git
 LIBSTB-HAL = libstb-hal-ddt
 LH_BRANCH = master
-HAL_URL = https://github.com/Duckbox-Developers/$(LIBSTB-HAL).git	
+HAL_URL = https://github.com/Duckbox-Developers/libstb-hal-ddt.git	
 endif
 
 # max
 ifeq ($(FLAVOUR), max)
 NEUTRINO = neutrino-max
 N_BRANCH = master
-N_URL = https://github.com/MaxWiesel/$(NEUTRINO).git
+N_URL = https://github.com/MaxWiesel/neutrino-max.git
 LIBSTB-HAL = libstb-hal-max
 LH_BRANCH = master
-HAL_URL = https://github.com/MaxWiesel/$(LIBSTB-HAL).git	
+HAL_URL = https://github.com/MaxWiesel/libstb-hal-max.git	
 endif
 
 # tangos
 ifeq ($(FLAVOUR), tangos)
 NEUTRINO = neutrino-tangos
 N_BRANCH = master
-N_URL = https://github.com/TangoCash/$(NEUTRINO).git
+N_URL = https://github.com/TangoCash/neutrino-tangos.git
 LIBSTB-HAL = libstb-hal-tangos
 LH_BRANCH = master
-HAL_URL = https://github.com/TangoCash/$(LIBSTB-HAL).git	
+HAL_URL = https://github.com/TangoCash/libstb-hal-tangos.git	
 endif
 
 # ni
 ifeq ($(FLAVOUR), ni)
 NEUTRINO = ni-neutrino
 N_BRANCH = master
-N_URL = https://bitbucket.org/neutrino-images/$(NEUTRINO).git
+N_URL = https://bitbucket.org/neutrino-images/ni-neutrino.git
 LIBSTB-HAL = ni-libstb-hal
 LH_BRANCH = master
-HAL_URL = https://bitbucket.org/neutrino-images/$(LIBSTB-HAL).git	
-endif
-
-# vanilla
-ifeq ($(FLAVOUR), vanilla)
-NEUTRINO = neutrino-mp
-N_BRANCH = master
-N_URL = https://github.com/$(NEUTRINO)/$(NEUTRINO).git
-LIBSTB-HAL = libstb-hal
-LH_BRANCH = master
-HAL_URL = https://github.com/neutrino-mp/$(LIBSTB-HAL).git	
+HAL_URL = https://bitbucket.org/neutrino-images/ni-libstb-hal.git	
 endif
 
 #
