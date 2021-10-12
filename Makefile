@@ -159,8 +159,8 @@ CFLAGS += -DDYNAMIC_LUAPOSIX
 CFLAGS += -D__KERNEL_STRICT_NAMES
 CFLAGS += -D__STDC_FORMAT_MACROS
 CFLAGS += -D__STDC_CONSTANT_MACROS
-CFLAGS += -DASSUME_MDEV
-CFLAGS += -DTEST_MENU
+#CFLAGS += -DASSUME_MDEV
+#CFLAGS += -DTEST_MENU
 # enable --as-needed for catching more build problems...
 CFLAGS += -Wl,--as-needed
 
@@ -223,6 +223,7 @@ $(N_OBJ)/config.status: | $(N_OBJ) $(N_SRC) libstb-hal
 			--enable-mdev \
 			--enable-giflib \
 			--enable-cleanup \
+			--enable-testing \
 			--with-target=native \
 			--with-boxtype=generic \
 			$(if $(filter $(BOXMODEL), raspi),--with-boxmodel=raspi) \
@@ -243,7 +244,7 @@ $(LH_OBJ)/config.status: | $(LH_OBJ) $(LH_SRC)
 			$(if $(filter $(BOXMODEL), raspi),--with-boxmodel=raspi) \
 			--enable-maintainer-mode \
 			--enable-shared=no \
-			$(if $(filter $(FLAVOUR), ni ddt tuxbox),--enable-gstreamer_10=yes) \
+			$(if $(filter $(FLAVOUR), ni ddt),--enable-gstreamer_10=yes) \
 			;
 
 # -----------------------------------------------------------------------------
