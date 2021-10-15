@@ -50,6 +50,13 @@ $:~ make clean
 
 * then start with step 1
 
+## updating source ##
+```bash
+$:~ make update
+```
+
+* then start with step 2
+
 
 
 
