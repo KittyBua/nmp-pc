@@ -109,10 +109,12 @@ endif
 ifeq ($(FLAVOUR), ni)
 NEUTRINO = ni-neutrino
 N_BRANCH = master
-N_URL = https://bitbucket.org/neutrino-images/ni-neutrino.git
+#N_URL = https://bitbucket.org/neutrino-images/ni-neutrino.git
+N_URL = https://github.com/neutrino-images/ni-neutrino.git
 LIBSTB-HAL = ni-libstb-hal
 LH_BRANCH = master
-HAL_URL = https://bitbucket.org/neutrino-images/ni-libstb-hal.git	
+#HAL_URL = https://bitbucket.org/neutrino-images/ni-libstb-hal.git	
+HAL_URL = https://github.com/neutrino-images/ni-libstb-hal.git
 endif
 
 #
@@ -244,7 +246,7 @@ $(LH_OBJ)/config.status: | $(LH_OBJ) $(LH_SRC)
 			$(if $(filter $(BOXMODEL), raspi),--with-boxmodel=raspi) \
 			--enable-maintainer-mode \
 			--enable-shared=no \
-			$(if $(filter $(FLAVOUR), ni ddt),--enable-gstreamer_10=yes) \
+			$(if $(filter $(FLAVOUR), ddt),--enable-gstreamer_10=yes) \
 			;
 
 # -----------------------------------------------------------------------------
