@@ -176,6 +176,7 @@ CFLAGS += -I/usr/include/sigc++-2.0
 CFLAGS += -I/usr/lib/x86_64-linux-gnu/sigc++-2.0/include
 
 # gstreamer flags
+CFLAGS += -DENABLE_GSTREAMER_10
 CFLAGS += $(shell pkg-config --cflags --libs gstreamer-1.0)
 CFLAGS += $(shell pkg-config --cflags --libs gstreamer-audio-1.0)
 CFLAGS += $(shell pkg-config --cflags --libs gstreamer-video-1.0)
@@ -288,8 +289,6 @@ libstb-hal-clean:
 	rm -rf $(LH_OBJ)
 
 clean: neutrino-clean libstb-hal-clean
-	rm -rf $(OBJ)/*
-	rm -rf $(DEST)/var/tuxbox/config/neutrino.conf
 
 clean-all: clean
 	rm -rf $(DEST)

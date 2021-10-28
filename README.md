@@ -43,12 +43,7 @@ $:~ make neutrino
 $:~ make run
 ```
 
-* if you want to choose other neutrino flavour:
-```bash
-$:~ make clean
-```
-
-* then start with step 1
+* if you want to choose other neutrino flavour start again with step 1
 
 ## updating source ##
 ```bash
@@ -56,6 +51,11 @@ $:~ make update
 ```
 
 * then start with step 2
+
+## clean build ##
+```bash
+$:~ make clean
+```
 
 
 
