@@ -31,6 +31,8 @@ $:~ make libdvbsi
 * step 1:
 ```bash
 $:~ make init
+or
+$:~ make
 ```
 
 step 2:
