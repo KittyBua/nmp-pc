@@ -31,13 +31,12 @@ $:~ make libdvbsi
 * step 1:
 ```bash
 $:~ make init
-or
-$:~ make
 ```
 
 step 2:
 ```bash
 $:~ make neutrino
+or make
 ```
 
 * step 3:

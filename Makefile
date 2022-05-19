@@ -42,6 +42,10 @@
 # apt-get install libgstreamer-plugins-bad1.0-dev
 # apt-get install clutter-1.0
 # -----------------------------------------------------------------------------
+
+# first target is default...
+default: neutrino
+
 # init
 init:
 	@echo "Select neutrino"
@@ -189,10 +193,6 @@ CXXFLAGS +=  -std=c++11
 export CFLAGS CXXFLAGS
 
 # -----------------------------------------------------------------------------
-
-# first target is default...
-default: neutrino
-
 run:
 	export SIMULATE_FE=1; \
 	$(DEST)/bin/neutrino
