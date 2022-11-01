@@ -113,7 +113,7 @@ N_URL = https://github.com/TangoCash/neutrino-tangos.git
 HAL = libstb-hal-tangos
 HAL_BRANCH = master
 HAL_URL = https://github.com/TangoCash/libstb-hal-tangos.git
-N_PATCHES =
+N_PATCHES = neutrino-tangos.patch
 HAL_PATCHES =	
 endif
 
@@ -342,17 +342,22 @@ update: $(HAL_SRC) $(N_SRC)
 neutrino-clean:
 	-$(MAKE) -C $(N_OBJ) clean
 	rm -rf $(N_OBJ)
-	rm -rf $(N_SRC)
 
 libstb-hal-clean:
 	-$(MAKE) -C $(HAL_OBJ) clean
 	rm -rf $(HAL_OBJ)
-	rm -rf $(HAL_SRC)
 
 clean: neutrino-clean libstb-hal-clean
 
-clean-all: clean
-	rm -rf $(DEST)
+neutrino-distclean:
+	rm -rf $(N_OBJ)
+	rm -rf $(N_SRC)
+
+libstb-hal-distclean:
+	rm -rf $(HAL_OBJ)
+	rm -rf $(HAL_SRC)
+	
+distclean: neutrino-distclean libstb-hal-distclean
 
 # -----------------------------------------------------------------------------
 
