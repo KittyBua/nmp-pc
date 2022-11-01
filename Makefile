@@ -74,10 +74,11 @@ ifeq ($(FLAVOUR), tuxbox)
 NEUTRINO = gui-neutrino
 N_BRANCH = master
 N_URL = https://github.com/tuxbox-neutrino/gui-neutrino.git
-LIBSTB-HAL = library-stb-hal
-LH_BRANCH = mpx
+HAL = library-stb-hal
+HAL_BRANCH = mpx
 HAL_URL = https://github.com/tuxbox-neutrino/library-stb-hal.git
-N_PATCHES =	
+N_PATCHES =
+HAL_PATCHES =	
 endif
 
 # ddt
@@ -85,10 +86,11 @@ ifeq ($(FLAVOUR), ddt)
 NEUTRINO = neutrino-ddt
 N_BRANCH = master
 N_URL = https://github.com/Duckbox-Developers/neutrino-ddt.git
-LIBSTB-HAL = libstb-hal-ddt
-LH_BRANCH = master
+HAL = libstb-hal-ddt
+HAL_BRANCH = master
 HAL_URL = https://github.com/Duckbox-Developers/libstb-hal-ddt.git
-N_PATCHES = neutrino-ddt.patch	
+N_PATCHES = neutrino-ddt.patch
+HAL_PATCHES =	
 endif
 
 # max
@@ -96,10 +98,11 @@ ifeq ($(FLAVOUR), max)
 NEUTRINO = neutrino-max
 N_BRANCH = master
 N_URL = https://github.com/MaxWiesel/neutrino-max.git
-LIBSTB-HAL = libstb-hal-max
-LH_BRANCH = master
+HAL = libstb-hal-max
+HAL_BRANCH = master
 HAL_URL = https://github.com/MaxWiesel/libstb-hal-max.git
-N_PATCHES =	
+N_PATCHES =
+HAL_PATCHES =	
 endif
 
 # tangos
@@ -107,10 +110,11 @@ ifeq ($(FLAVOUR), tangos)
 NEUTRINO = neutrino-tangos
 N_BRANCH = master
 N_URL = https://github.com/TangoCash/neutrino-tangos.git
-LIBSTB-HAL = libstb-hal-tangos
-LH_BRANCH = master
+HAL = libstb-hal-tangos
+HAL_BRANCH = master
 HAL_URL = https://github.com/TangoCash/libstb-hal-tangos.git
-N_PATCHES =	
+N_PATCHES =
+HAL_PATCHES =	
 endif
 
 # ni
@@ -119,11 +123,12 @@ NEUTRINO = ni-neutrino
 N_BRANCH = master
 #N_URL = https://bitbucket.org/neutrino-images/ni-neutrino.git
 N_URL = https://github.com/neutrino-images/ni-neutrino.git
-LIBSTB-HAL = ni-libstb-hal
-LH_BRANCH = master
+HAL = ni-libstb-hal
+HAL_BRANCH = master
 #HAL_URL = https://bitbucket.org/neutrino-images/ni-libstb-hal.git	
 HAL_URL = https://github.com/neutrino-images/ni-libstb-hal.git
 N_PATCHES =
+HAL_PATCHES =
 endif
 
 #
@@ -133,20 +138,56 @@ BOXMODEL ?= generic
 NEUTRINO ?= gui-neutrino
 N_BRANCH ?= master
 N_URL ?= https://github.com/tuxbox-neutrino/$(NEUTRINO).git
-LIBSTB-HAL ?= library-stb-hal
-LH_BRANCH ?= mpx
-HAL_URL ?= https://github.com/tuxbox-neutrino/$(LIBSTB-HAL).git
+HAL ?= library-stb-hal
+HAL_BRANCH ?= mpx
+HAL_URL ?= https://github.com/tuxbox-neutrino/$(HAL).git
+N_PATCHES ?=
+HAL_PATCHES ?=
 
 #
 SRC = $(PWD)/src
 OBJ = $(PWD)/obj
 DEST = $(PWD)/root
 PATCHES = $(PWD)/patches
+ARCHIVE = $(HOME)/Archive
 
-LH_SRC = $(SRC)/$(LIBSTB-HAL)
-LH_OBJ = $(OBJ)/$(LIBSTB-HAL)
+HAL_SRC = $(SRC)/$(HAL)
+HAL_OBJ = $(OBJ)/$(HAL)
 N_SRC  = $(SRC)/$(NEUTRINO)
 N_OBJ  = $(OBJ)/$(NEUTRINO)
+
+#
+TERM_RED             := \033[00;31m
+TERM_RED_BOLD        := \033[01;31m
+TERM_GREEN           := \033[00;32m
+TERM_GREEN_BOLD      := \033[01;32m
+TERM_YELLOW          := \033[00;33m
+TERM_YELLOW_BOLD     := \033[01;33m
+TERM_NORMAL          := \033[0m
+
+#
+PATCH                 = patch -p1 -i $(PATCHES)
+APATCH                = patch -p1 -i
+define apply_patches
+    for i in $(1); do \
+        if [ -d $$i ]; then \
+            for p in $$i/*; do \
+                if [ $${p:0:1} == "/" ]; then \
+                    echo -e "==> $(TERM_RED)Applying Patch:$(TERM_NORMAL) $$p"; $(APATCH) $$p; \
+                else \
+                    echo -e "==> $(TERM_RED)Applying Patch:$(TERM_NORMAL) $$p"; $(PATCH)/$$p; \
+                fi; \
+            done; \
+        else \
+            if [ $${i:0:1} == "/" ]; then \
+                echo -e "==> $(TERM_RED)Applying Patch:$(TERM_NORMAL) $$i"; $(APATCH) $$i; \
+            else \
+                echo -e "==> $(TERM_RED)Applying Patch:$(TERM_NORMAL) $$i"; $(PATCH)/$$i; \
+            fi; \
+        fi; \
+    done; \
+    echo
+endef
 
 #
 CFLAGS  = -W
@@ -217,13 +258,12 @@ neutrino: $(N_OBJ)/config.status | $(DEST)
 	-rm $(N_OBJ)/src/neutrino # force relinking on changed libstb-hal
 	$(MAKE) -C $(N_OBJ) install
 
-libstb-hal: $(LH_OBJ)/config.status | $(DEST)
-	$(MAKE) -C $(LH_OBJ) install
+libstb-hal: $(HAL_OBJ)/config.status | $(DEST)
+	$(MAKE) -C $(HAL_OBJ) install
 
 $(N_OBJ)/config.status: | $(N_OBJ) $(N_SRC) libstb-hal
 	set -e; cd $(N_SRC); \
 		git checkout $(N_BRANCH); \
-		patch -p1 -i $(PATCHES)/$(N_PATCHES)
 	$(N_SRC)/autogen.sh
 	set -e; cd $(N_OBJ); \
 		$(N_SRC)/configure \
@@ -238,16 +278,16 @@ $(N_OBJ)/config.status: | $(N_OBJ) $(N_SRC) libstb-hal
 			--with-boxtype=generic \
 			$(if $(filter $(BOXMODEL), raspi),--with-boxmodel=raspi) \
 			$(if $(filter $(FLAVOUR), tangos),--disable-pip) \
-			--with-stb-hal-includes=$(LH_SRC)/include \
+			--with-stb-hal-includes=$(HAL_SRC)/include \
 			--with-stb-hal-build=$(DEST)/lib \
 			; \
 
-$(LH_OBJ)/config.status: | $(LH_OBJ) $(LH_SRC)
-	set -e; cd $(LH_SRC); \
-		git checkout $(LH_BRANCH)
-	$(LH_SRC)/autogen.sh
-	set -e; cd $(LH_OBJ); \
-		$(LH_SRC)/configure \
+$(HAL_OBJ)/config.status: | $(HAL_OBJ) $(HAL_SRC)
+	set -e; cd $(HAL_SRC); \
+		git checkout $(HAL_BRANCH)
+	$(HAL_SRC)/autogen.sh
+	set -e; cd $(HAL_OBJ); \
+		$(HAL_SRC)/configure \
 			--prefix=$(DEST) \
 			--with-target=native \
 			--with-boxtype=generic \
@@ -263,7 +303,7 @@ $(OBJ):
 	mkdir -p $(OBJ)
 
 $(OBJ)/$(NEUTRINO) \
-$(OBJ)/$(LIBSTB-HAL): | $(OBJ)
+$(OBJ)/$(HAL): | $(OBJ)
 	mkdir -p $@
 
 $(DEST):
@@ -273,27 +313,41 @@ $(SRC):
 	mkdir -p $@
 
 $(N_SRC): | $(SRC)
-	cd $(SRC) && git clone $(N_URL)
+	rm -rf $(N_SRC)
+	[ -d "$(ARCHIVE)/$(NEUTRINO).git" ] && \
+	(cd $(ARCHIVE)/$(NEUTRINO).git; git pull; cd "$(SRC)";); \
+	[ -d "$(ARCHIVE)/$(NEUTRINO).git" ] || \
+	git clone $(N_URL) $(ARCHIVE)/$(NEUTRINO).git; \
+	cp -ra $(ARCHIVE)/$(NEUTRINO).git $(SRC)/$(NEUTRINO);
+	set -e; cd $(N_SRC); \
+		$(call apply_patches, $(N_PATCHES)) 
 
-$(LH_SRC): | $(SRC)
-	cd $(SRC) && git clone $(HAL_URL)
+$(HAL_SRC): | $(SRC)
+	rm -rf $(HAL_SRC)
+	[ -d "$(ARCHIVE)/$(HAL).git" ] && \
+	(cd $(ARCHIVE)/$(HAL).git; git pull; cd "$(SRC)";); \
+	[ -d "$(ARCHIVE)/$(HAL).git" ] || \
+	git clone $(HAL_URL) $(ARCHIVE)/$(HAL).git; \
+	cp -ra $(ARCHIVE)/$(HAL).git $(SRC)/$(HAL);
+	set -e; cd $(HAL_SRC); \
+		$(call apply_patches, $(HAL_PATCHES)) 
 
 # -----------------------------------------------------------------------------
 
-checkout: $(SRC)/$(LIBSTB-HAL) $(SRC)/$(NEUTRINO)
+checkout: $(SRC)/$(HAL) $(SRC)/$(NEUTRINO)
 
-update: $(LH_SRC) $(N_SRC)
-	cd $(LH_SRC) && git pull
-	cd $(N_SRC) && git pull
+update: $(HAL_SRC) $(N_SRC)
 	git pull
 
 neutrino-clean:
 	-$(MAKE) -C $(N_OBJ) clean
 	rm -rf $(N_OBJ)
+	rm -rf $(N_SRC)
 
 libstb-hal-clean:
-	-$(MAKE) -C $(LH_OBJ) clean
-	rm -rf $(LH_OBJ)
+	-$(MAKE) -C $(HAL_OBJ) clean
+	rm -rf $(HAL_OBJ)
+	rm -rf $(HAL_SRC)
 
 clean: neutrino-clean libstb-hal-clean
 
