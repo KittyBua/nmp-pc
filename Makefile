@@ -76,7 +76,8 @@ N_BRANCH = master
 N_URL = https://github.com/tuxbox-neutrino/gui-neutrino.git
 LIBSTB-HAL = library-stb-hal
 LH_BRANCH = mpx
-HAL_URL = https://github.com/tuxbox-neutrino/library-stb-hal.git	
+HAL_URL = https://github.com/tuxbox-neutrino/library-stb-hal.git
+N_PATCHES =	
 endif
 
 # ddt
@@ -86,7 +87,8 @@ N_BRANCH = master
 N_URL = https://github.com/Duckbox-Developers/neutrino-ddt.git
 LIBSTB-HAL = libstb-hal-ddt
 LH_BRANCH = master
-HAL_URL = https://github.com/Duckbox-Developers/libstb-hal-ddt.git	
+HAL_URL = https://github.com/Duckbox-Developers/libstb-hal-ddt.git
+N_PATCHES = neutrino-ddt.patch	
 endif
 
 # max
@@ -96,7 +98,8 @@ N_BRANCH = master
 N_URL = https://github.com/MaxWiesel/neutrino-max.git
 LIBSTB-HAL = libstb-hal-max
 LH_BRANCH = master
-HAL_URL = https://github.com/MaxWiesel/libstb-hal-max.git	
+HAL_URL = https://github.com/MaxWiesel/libstb-hal-max.git
+N_PATCHES =	
 endif
 
 # tangos
@@ -106,7 +109,8 @@ N_BRANCH = master
 N_URL = https://github.com/TangoCash/neutrino-tangos.git
 LIBSTB-HAL = libstb-hal-tangos
 LH_BRANCH = master
-HAL_URL = https://github.com/TangoCash/libstb-hal-tangos.git	
+HAL_URL = https://github.com/TangoCash/libstb-hal-tangos.git
+N_PATCHES =	
 endif
 
 # ni
@@ -119,6 +123,7 @@ LIBSTB-HAL = ni-libstb-hal
 LH_BRANCH = master
 #HAL_URL = https://bitbucket.org/neutrino-images/ni-libstb-hal.git	
 HAL_URL = https://github.com/neutrino-images/ni-libstb-hal.git
+N_PATCHES =
 endif
 
 #
@@ -136,6 +141,7 @@ HAL_URL ?= https://github.com/tuxbox-neutrino/$(LIBSTB-HAL).git
 SRC = $(PWD)/src
 OBJ = $(PWD)/obj
 DEST = $(PWD)/root
+PATCHES = $(PWD)/patches
 
 LH_SRC = $(SRC)/$(LIBSTB-HAL)
 LH_OBJ = $(OBJ)/$(LIBSTB-HAL)
@@ -216,7 +222,8 @@ libstb-hal: $(LH_OBJ)/config.status | $(DEST)
 
 $(N_OBJ)/config.status: | $(N_OBJ) $(N_SRC) libstb-hal
 	set -e; cd $(N_SRC); \
-		git checkout $(N_BRANCH)
+		git checkout $(N_BRANCH); \
+		patch -p1 -i $(PATCHES)/$(N_PATCHES)
 	$(N_SRC)/autogen.sh
 	set -e; cd $(N_OBJ); \
 		$(N_SRC)/configure \
