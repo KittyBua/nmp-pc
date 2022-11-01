@@ -1,0 +1,12 @@
+diff -Nur neutrino-tangos.git/src/gui/imageinfo.cpp neutrino-tangos.git.patched/src/gui/imageinfo.cpp
+--- neutrino-tangos.git/src/gui/imageinfo.cpp	2022-11-01 16:23:18.777086331 +0100
++++ neutrino-tangos.git.patched/src/gui/imageinfo.cpp	2022-11-01 17:41:22.527465384 +0100
+@@ -38,7 +38,7 @@
+ #include <daemonc/remotecontrol.h>
+ #include <system/flashtool.h>
+ #include <system/helpers.h>
+-#include "version.h"
++//#include "version.h"
+ #include <gui/buildinfo.h>
+ #define LICENSEDIR DATADIR "/neutrino/license/"
+ #define POLICY_DIR DATADIR "/neutrino/policy/"
