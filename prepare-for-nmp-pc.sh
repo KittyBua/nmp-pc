@@ -148,7 +148,9 @@ PACKAGES="\
     	${UBUNTU:+libao-dev}												\
     	${UBUNTU:+libsigc++-2.0-dev}											\
     	${UBUNTU:+libreadline6-dev}											\
-    	${UBUNTU:+clutter-1.0}
+    	${UBUNTU:+clutter-1.0}												\
+    	${UBUNTU:+yasm}													\
+    	${UBUNTU:+nasm}
     	";
 
 if [ "$UBUNTU" == 1 ]; then
