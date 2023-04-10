@@ -121,11 +121,9 @@ endif
 ifeq ($(FLAVOUR), ni)
 NEUTRINO = ni-neutrino
 N_BRANCH = master
-#N_URL = https://bitbucket.org/neutrino-images/ni-neutrino.git
 N_URL = https://github.com/neutrino-images/ni-neutrino.git
 HAL = ni-libstb-hal
 HAL_BRANCH = master
-#HAL_URL = https://bitbucket.org/neutrino-images/ni-libstb-hal.git	
 HAL_URL = https://github.com/neutrino-images/ni-libstb-hal.git
 N_PATCHES =
 HAL_PATCHES =
