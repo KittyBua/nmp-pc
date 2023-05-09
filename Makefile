@@ -49,20 +49,20 @@ default: neutrino
 # init
 init:
 	@echo "Select neutrino"
-	@echo "	1) tuxbox"
-	@echo "	2) ddt"
+	@echo "	1) ddt"
+	@echo "	2) tuxbox"
 	@echo "	3) max"
 	@echo "	4) tangos"
 	@echo "	5) ni"
 	@read -p "Select neutrino(1-5)?" FLAVOUR; \
 	FLAVOUR=$${FLAVOUR}; \
 	case "$$FLAVOUR" in \
-		1) FLAVOUR="tuxbox";; \
-		2) FLAVOUR="ddt";; \
+		1) FLAVOUR="ddt";; \
+		2) FLAVOUR="tuxbox";; \
 		3) FLAVOUR="max";;\
 		4) FLAVOUR="tangos";; \
 		5) FLAVOUR="ni";; \
-		*) FLAVOUR="tuxbox";; \
+		*) FLAVOUR="ddt";; \
 	esac; \
 	echo "FLAVOUR=$$FLAVOUR" > config.local
 	@echo ""
@@ -133,12 +133,12 @@ endif
 BOXMODEL ?= generic
 
 #
-NEUTRINO ?= gui-neutrino
+NEUTRINO ?= neutrino-ddt
 N_BRANCH ?= master
-N_URL ?= https://github.com/tuxbox-neutrino/$(NEUTRINO).git
-HAL ?= library-stb-hal
-HAL_BRANCH ?= mpx
-HAL_URL ?= https://github.com/tuxbox-neutrino/$(HAL).git
+N_URL ?= https://github.com/Duckbox-Developers/$(NEUTRINO).git
+HAL ?= libstb-hal-ddt
+HAL_BRANCH ?= master
+HAL_URL ?= https://github.com/Duckbox-Developers/$(HAL).git
 N_PATCHES ?=
 HAL_PATCHES ?=
 
@@ -151,8 +151,8 @@ ARCHIVE = $(HOME)/Archive
 
 HAL_SRC = $(SRC)/$(HAL)
 HAL_OBJ = $(OBJ)/$(HAL)
-N_SRC  = $(SRC)/$(NEUTRINO)
-N_OBJ  = $(OBJ)/$(NEUTRINO)
+N_SRC = $(SRC)/$(NEUTRINO)
+N_OBJ = $(OBJ)/$(NEUTRINO)
 
 #
 TERM_RED             := \033[00;31m
@@ -271,7 +271,6 @@ $(N_OBJ)/config.status: | $(N_OBJ) $(N_SRC) libstb-hal
 			--enable-mdev \
 			--enable-giflib \
 			--enable-cleanup \
-			--enable-testing \
 			--with-target=native \
 			--with-boxtype=generic \
 			$(if $(filter $(BOXMODEL), raspi),--with-boxmodel=raspi) \
