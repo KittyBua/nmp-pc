@@ -46,32 +46,7 @@
 # first target is default...
 default: neutrino
 
-# init
-init:
-	@echo "Select neutrino"
-	@echo "	1) ddt"
-	@echo "	2) tuxbox"
-	@echo "	3) max"
-	@echo "	4) tangos"
-	@echo "	5) ni"
-	@read -p "Select neutrino(1-5)?" FLAVOUR; \
-	FLAVOUR=$${FLAVOUR}; \
-	case "$$FLAVOUR" in \
-		1) FLAVOUR="ddt";; \
-		2) FLAVOUR="tuxbox";; \
-		3) FLAVOUR="max";;\
-		4) FLAVOUR="tangos";; \
-		5) FLAVOUR="ni";; \
-		*) FLAVOUR="ddt";; \
-	esac; \
-	echo "FLAVOUR=$$FLAVOUR" > config.local
-	@echo ""
-
--include config.local
-FLAVOUR ?= ddt
-
 # ddt
-ifeq ($(FLAVOUR), ddt)
 NEUTRINO = neutrino-ddt
 N_BRANCH = master
 N_URL = https://github.com/Duckbox-Developers/neutrino-ddt.git
@@ -80,55 +55,6 @@ HAL_BRANCH = master
 HAL_URL = https://github.com/Duckbox-Developers/libstb-hal-ddt.git
 N_PATCHES = neutrino-ddt.patch
 HAL_PATCHES =	
-endif
-
-# tuxbox
-ifeq ($(FLAVOUR), tuxbox)
-NEUTRINO = gui-neutrino
-N_BRANCH = master
-N_URL = https://github.com/tuxbox-neutrino/gui-neutrino.git
-HAL = library-stb-hal
-HAL_BRANCH = mpx
-HAL_URL = https://github.com/tuxbox-neutrino/library-stb-hal.git
-N_PATCHES =
-HAL_PATCHES =	
-endif
-
-# max
-ifeq ($(FLAVOUR), max)
-NEUTRINO = neutrino-max
-N_BRANCH = master
-N_URL = https://github.com/MaxWiesel/neutrino-max.git
-HAL = libstb-hal-max
-HAL_BRANCH = master
-HAL_URL = https://github.com/MaxWiesel/libstb-hal-max.git
-N_PATCHES =
-HAL_PATCHES =	
-endif
-
-# tangos
-ifeq ($(FLAVOUR), tangos)
-NEUTRINO = neutrino-tangos
-N_BRANCH = master
-N_URL = https://github.com/TangoCash/neutrino-tangos.git
-HAL = libstb-hal-tangos
-HAL_BRANCH = master
-HAL_URL = https://github.com/TangoCash/libstb-hal-tangos.git
-N_PATCHES = neutrino-tangos.patch
-HAL_PATCHES =	
-endif
-
-# ni
-ifeq ($(FLAVOUR), ni)
-NEUTRINO = ni-neutrino
-N_BRANCH = master
-N_URL = https://github.com/neutrino-images/ni-neutrino.git
-HAL = ni-libstb-hal
-HAL_BRANCH = master
-HAL_URL = https://github.com/neutrino-images/ni-libstb-hal.git
-N_PATCHES =
-HAL_PATCHES =
-endif
 
 #
 BOXMODEL ?= generic
@@ -136,7 +62,7 @@ BOXMODEL ?= generic
 #
 SRC = $(PWD)/src
 OBJ = $(PWD)/obj
-DEST = $(PWD)/root
+DEST = $(PWD)/$(BOXMODEL)
 PATCHES = $(PWD)/patches
 ARCHIVE = $(HOME)/Archive
 
@@ -274,7 +200,6 @@ $(HAL_OBJ)/config.status: | $(HAL_OBJ) $(HAL_SRC)
 	set -e; cd $(HAL_OBJ); \
 		$(HAL_SRC)/configure \
 			--prefix=$(DEST) \
-			--with-target=native \
 			--with-boxtype=generic \
 			$(if $(filter $(BOXMODEL), raspi),--with-boxmodel=raspi) \
 			--enable-maintainer-mode \

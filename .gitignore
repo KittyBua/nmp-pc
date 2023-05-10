@@ -1,15 +1,6 @@
-config.local
 /obj/*
-/root/*
+/generic/*
 /src/ffmpeg-4.2.tar.bz2
-/src/gui-neutrino/
-/src/library-stb-hal/
-/src/libstb-hal-ddt/
-/src/libstb-hal-max/
-/src/libstb-hal-tangos/
 /src/lua-5.2.4.tar.gz
 /src/neutrino-ddt/
-/src/neutrino-max/
-/src/neutrino-tangos/
-/src/ni-libstb-hal/
-/src/ni-neutrino/
+/src/libstb-hal-ddt/
