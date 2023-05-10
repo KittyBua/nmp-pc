@@ -1,6 +1,6 @@
 /obj/*
 /generic/*
-/src/ffmpeg-4.2.tar.bz2
-/src/lua-5.2.4.tar.gz
+/src/ffmpeg-*
+/src/lua-*
 /src/neutrino-ddt/
 /src/libstb-hal-ddt/
