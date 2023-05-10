@@ -44,7 +44,7 @@
 # -----------------------------------------------------------------------------
 
 # first target is default...
-default: neutrino
+default: libstb-hal neutrino
 
 # ddt
 NEUTRINO = neutrino-ddt
@@ -64,23 +64,12 @@ SRC = $(PWD)/src
 OBJ = $(PWD)/obj
 DEST = $(PWD)/$(BOXMODEL)
 PATCHES = $(PWD)/patches
-ARCHIVE = $(HOME)/Archive
 
 HAL_SRC = $(SRC)/$(HAL)
 HAL_OBJ = $(OBJ)/$(HAL)
 N_SRC = $(SRC)/$(NEUTRINO)
 N_OBJ = $(OBJ)/$(NEUTRINO)
 
-#
-TERM_RED             := \033[00;31m
-TERM_RED_BOLD        := \033[01;31m
-TERM_GREEN           := \033[00;32m
-TERM_GREEN_BOLD      := \033[01;32m
-TERM_YELLOW          := \033[00;33m
-TERM_YELLOW_BOLD     := \033[01;33m
-TERM_NORMAL          := \033[0m
-
-#
 PATCH                 = patch -p1 -i $(PATCHES)
 APATCH                = patch -p1 -i
 define apply_patches
@@ -88,19 +77,20 @@ define apply_patches
         if [ -d $$i ]; then \
             for p in $$i/*; do \
                 if [ $${p:0:1} == "/" ]; then \
-                    echo -e "==> $(TERM_RED)Applying Patch:$(TERM_NORMAL) $$p"; $(APATCH) $$p; \
+                    echo -e "==> Applying Patch: $$p"; $(APATCH) $$p; \
                 else \
-                    echo -e "==> $(TERM_RED)Applying Patch:$(TERM_NORMAL) $$p"; $(PATCH)/$$p; \
+                    echo -e "==> Applying Patch: $$p"; $(PATCH)/$$p; \
                 fi; \
             done; \
         else \
             if [ $${i:0:1} == "/" ]; then \
-                echo -e "==> $(TERM_RED)Applying Patch:$(TERM_NORMAL) $$i"; $(APATCH) $$i; \
+                echo -e "==> Applying Patch: $$i"; $(APATCH) $$i; \
             else \
-                echo -e "==> $(TERM_RED)Applying Patch:$(TERM_NORMAL) $$i"; $(PATCH)/$$i; \
+                echo -e "==> Applying Patch: $$i"; $(PATCH)/$$i; \
             fi; \
         fi; \
     done; \
+    echo -e "Patching $(TERM_GREEN_BOLD)$(PKG_NAME) $(PKG_VER)$(TERM_NORMAL) completed"; \
     echo
 endef
 
@@ -222,27 +212,25 @@ $(SRC):
 
 $(N_SRC): | $(SRC)
 	rm -rf $(N_SRC)
-	[ -d "$(ARCHIVE)/$(NEUTRINO).git" ] && \
-	(cd $(ARCHIVE)/$(NEUTRINO).git; git pull; cd "$(SRC)";); \
-	[ -d "$(ARCHIVE)/$(NEUTRINO).git" ] || \
-	git clone $(N_URL) $(ARCHIVE)/$(NEUTRINO).git; \
-	cp -ra $(ARCHIVE)/$(NEUTRINO).git $(SRC)/$(NEUTRINO);
+	[ -d "$(N_SRC)" ] && \
+	(cd $(N_SRC); git pull;); \
+	[ -d "$(N_SRC)" ] || \
+	git clone $(N_URL) $(N_SRC); \
 	set -e; cd $(N_SRC); \
-		$(call apply_patches, $(N_PATCHES)) 
+		$(call apply_patches, $(N_PATCHES))
 
 $(HAL_SRC): | $(SRC)
 	rm -rf $(HAL_SRC)
-	[ -d "$(ARCHIVE)/$(HAL).git" ] && \
-	(cd $(ARCHIVE)/$(HAL).git; git pull; cd "$(SRC)";); \
-	[ -d "$(ARCHIVE)/$(HAL).git" ] || \
-	git clone $(HAL_URL) $(ARCHIVE)/$(HAL).git; \
-	cp -ra $(ARCHIVE)/$(HAL).git $(SRC)/$(HAL);
+	[ -d "$(HAL_SRC)" ] && \
+	(cd $(HAL_SRC); git pull;); \
+	[ -d "$(HAL_SRC)" ] || \
+	git clone $(HAL_URL) $(HAL_SRC); \
 	set -e; cd $(HAL_SRC); \
-		$(call apply_patches, $(HAL_PATCHES)) 
+		$(call apply_patches, $(HAL_PATCHES))
 
 checkout: $(SRC)/$(HAL) $(SRC)/$(NEUTRINO)
 
-update: $(HAL_SRC) $(N_SRC)
+update:
 	git pull
 
 neutrino-clean:
@@ -258,10 +246,27 @@ clean: neutrino-clean libstb-hal-clean
 neutrino-distclean:
 	rm -rf $(N_OBJ)
 	rm -rf $(N_SRC)
+	rm -rf $(SRC)/neutrino-plugin-scripts-lua
 
 libstb-hal-distclean:
 	rm -rf $(HAL_OBJ)
 	rm -rf $(HAL_SRC)
+	
+#
+# neutrino-plugins-scripts-lua
+#
+plugins-lua:
+	set -e; 
+	[ -d "$(SRC)/neutrino-plugin-scripts-lua" ] && \
+	(cd $(SRC)/plugin-scripts-lua; git pull;); \
+	[ -d "$(SRC)/plugin-scripts-lua.git" ] || \
+	git clone https://github.com/Duckbox-Developers/plugin-scripts-lua.git $(SRC)/plugin-scripts-lua; \
+	cd $(SRC)/plugin-scripts-lua; \
+		install -d $(DEST)/var/tuxbox/plugins
+#		cp -R $(BUILD_TMP)/neutrino-plugin-scripts-lua/favorites2bin/* $(TARGET_DIR)/var/tuxbox/plugins/
+		cp -R $(SRC)/plugin-scripts-lua/plugins/ard_mediathek/* $(DEST)/var/tuxbox/plugins/
+		cp -R $(SRC)/plugin-scripts-lua/plugins/mtv/* $(DEST)/var/tuxbox/plugins/
+		cp -R $(SRC)/plugin-scripts-lua/plugins/netzkino/* $(DEST)/var/tuxbox/plugins/
 	
 distclean: neutrino-distclean libstb-hal-distclean
 
