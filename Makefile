@@ -68,18 +68,7 @@ init:
 	@echo ""
 
 -include config.local
-
-# tuxbox
-ifeq ($(FLAVOUR), tuxbox)
-NEUTRINO = gui-neutrino
-N_BRANCH = master
-N_URL = https://github.com/tuxbox-neutrino/gui-neutrino.git
-HAL = library-stb-hal
-HAL_BRANCH = mpx
-HAL_URL = https://github.com/tuxbox-neutrino/library-stb-hal.git
-N_PATCHES =
-HAL_PATCHES =	
-endif
+FLAVOUR ?= ddt
 
 # ddt
 ifeq ($(FLAVOUR), ddt)
@@ -90,6 +79,18 @@ HAL = libstb-hal-ddt
 HAL_BRANCH = master
 HAL_URL = https://github.com/Duckbox-Developers/libstb-hal-ddt.git
 N_PATCHES = neutrino-ddt.patch
+HAL_PATCHES =	
+endif
+
+# tuxbox
+ifeq ($(FLAVOUR), tuxbox)
+NEUTRINO = gui-neutrino
+N_BRANCH = master
+N_URL = https://github.com/tuxbox-neutrino/gui-neutrino.git
+HAL = library-stb-hal
+HAL_BRANCH = mpx
+HAL_URL = https://github.com/tuxbox-neutrino/library-stb-hal.git
+N_PATCHES =
 HAL_PATCHES =	
 endif
 
@@ -131,16 +132,6 @@ endif
 
 #
 BOXMODEL ?= generic
-
-#
-NEUTRINO ?= neutrino-ddt
-N_BRANCH ?= master
-N_URL ?= https://github.com/Duckbox-Developers/$(NEUTRINO).git
-HAL ?= libstb-hal-ddt
-HAL_BRANCH ?= master
-HAL_URL ?= https://github.com/Duckbox-Developers/$(HAL).git
-N_PATCHES ?=
-HAL_PATCHES ?=
 
 #
 SRC = $(PWD)/src
@@ -237,7 +228,6 @@ CXXFLAGS  = $(CFLAGS)
 CXXFLAGS +=  -std=c++11
 export CFLAGS CXXFLAGS
 
-# -----------------------------------------------------------------------------
 run:
 	export SIMULATE_FE=1; \
 	$(DEST)/bin/neutrino
@@ -249,8 +239,6 @@ run-gdb:
 run-valgrind:
 	export SIMULATE_FE=1; \
 	valgrind --leak-check=full --log-file="$(DEST)/valgrind.log" -v $(DEST)/bin/neutrino
-
-# -----------------------------------------------------------------------------
 
 neutrino: $(N_OBJ)/config.status | $(DEST)
 	-rm $(N_OBJ)/src/neutrino # force relinking on changed libstb-hal
@@ -294,8 +282,6 @@ $(HAL_OBJ)/config.status: | $(HAL_OBJ) $(HAL_SRC)
 			$(if $(filter $(FLAVOUR), ddt),--enable-gstreamer_10=yes) \
 			;
 
-# -----------------------------------------------------------------------------
-
 $(OBJ):
 	mkdir -p $(OBJ)
 
@@ -329,8 +315,6 @@ $(HAL_SRC): | $(SRC)
 	set -e; cd $(HAL_SRC); \
 		$(call apply_patches, $(HAL_PATCHES)) 
 
-# -----------------------------------------------------------------------------
-
 checkout: $(SRC)/$(HAL) $(SRC)/$(NEUTRINO)
 
 update: $(HAL_SRC) $(N_SRC)
@@ -356,8 +340,6 @@ libstb-hal-distclean:
 	
 distclean: neutrino-distclean libstb-hal-distclean
 
-# -----------------------------------------------------------------------------
-
 # libdvbsi is not commonly packaged for linux distributions...
 libdvbsi: | $(DEST)
 	rm -rf $(SRC)/libdvbsi++
@@ -370,8 +352,6 @@ libdvbsi: | $(DEST)
 		$(MAKE); \
 		make install
 	rm -rf $(SRC)/libdvbsi++
-
-# -----------------------------------------------------------------------------
 
 LUA_VER=5.2.4
 $(SRC)/lua-$(LUA_VER).tar.gz: | $(SRC)
@@ -386,8 +366,6 @@ lua: $(SRC)/lua-$(LUA_VER).tar.gz | $(DEST)
 		make install INSTALL_TOP=$(DEST)
 	rm -rf $(SRC)/lua-$(LUA_VER)
 	rm -rf $(DEST)/man
-
-# -----------------------------------------------------------------------------
 
 FFMPEG_VER=4.2
 $(SRC)/ffmpeg-$(FFMPEG_VER).tar.bz2: | $(SRC)
@@ -412,7 +390,7 @@ ffmpeg: $(SRC)/ffmpeg-$(FFMPEG_VER).tar.bz2 | $(DEST)
 		make install
 	rm -rf $(SRC)/ffmpeg-$(FFMPEG_VER)
 
-# -----------------------------------------------------------------------------
+libs: lua ffmpeg libdvbsi
 
 PHONY  = $(DEST)
 PHONY += checkout
