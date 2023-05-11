@@ -192,9 +192,7 @@ $(N_OBJ)/config.status: | $(N_OBJ) $(N_SRC) libstb-hal
 			--enable-giflib \
 			--enable-cleanup \
 			--with-target=native \
-			--with-boxtype=generic \
-			$(if $(filter $(BOXMODEL), raspi),--with-boxmodel=raspi) \
-			$(if $(filter $(FLAVOUR), tangos),--disable-pip) \
+			--with-boxtype=$(BOXMODEL) \
 			--with-stb-hal-includes=$(HAL_SRC)/include \
 			--with-stb-hal-build=$(DEST)/lib \
 			; \
@@ -206,12 +204,10 @@ $(HAL_OBJ)/config.status: | $(HAL_OBJ) $(HAL_SRC)
 	set -e; cd $(HAL_OBJ); \
 		$(HAL_SRC)/configure \
 			--prefix=$(DEST) \
-			--with-boxtype=generic \
-			$(if $(filter $(BOXMODEL), raspi),--with-boxmodel=raspi) \
+			--with-boxtype=$(BOXMODEL) \
 			--enable-maintainer-mode \
 			--enable-shared=no \
-			$(if $(filter $(FLAVOUR), ddt),--enable-gstreamer_10=yes) \
-			;
+			--enable-gstreamer_10=yes
 
 $(OBJ):
 	mkdir -p $(OBJ)
