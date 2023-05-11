@@ -156,13 +156,29 @@ run-valgrind:
 	export SIMULATE_FE=1; \
 	valgrind --leak-check=full --log-file="$(DEST)/valgrind.log" -v $(DEST)/bin/neutrino
 
-neutrino: $(N_OBJ)/config.status | $(DEST)
+neutrino: $(N_OBJ)/config.status | $(DEST) $(N_SRC)/src/gui/version.h
 	-rm $(N_OBJ)/src/neutrino # force relinking on changed libstb-hal
 	$(MAKE) -C $(N_OBJ) install
 
 libstb-hal: $(HAL_OBJ)/config.status | $(DEST)
 	$(MAKE) -C $(HAL_OBJ) install
 
+$(N_SRC)/src/gui/version.h:
+	@rm -f $@; \
+	echo '#define BUILT_DATE "'`date`'"' > $@
+	@if test -d $(HAL_SRC) ; then \
+		pushd $(HAL_SRC) ; \
+		HAL_REV=$$(git log | grep "^commit" | wc -l) ; \
+		popd ; \
+		pushd $(N_SRC) ; \
+		NMP_REV=$$(git log | grep "^commit" | wc -l) ; \
+		popd ; \
+		pushd $(PWD) ; \
+		DDT_REV=$$(git log | grep "^commit" | wc -l) ; \
+		popd ; \
+		echo '#define VCS "DDT-rev'$$DDT_REV'_HAL-rev'$$HAL_REV'_NMP-rev'$$NMP_REV'"' >> $@ ; \
+	fi
+	
 $(N_OBJ)/config.status: | $(N_OBJ) $(N_SRC) libstb-hal
 	set -e; cd $(N_SRC); \
 		git checkout $(N_BRANCH); \
