@@ -53,7 +53,7 @@ N_URL = https://github.com/Duckbox-Developers/neutrino-ddt.git
 HAL = libstb-hal-ddt
 HAL_BRANCH = master
 HAL_URL = https://github.com/Duckbox-Developers/libstb-hal-ddt.git
-N_PATCHES = neutrino-ddt.patch
+N_PATCHES =
 HAL_PATCHES =	
 
 #
