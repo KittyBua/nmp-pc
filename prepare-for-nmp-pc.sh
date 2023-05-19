@@ -118,7 +118,6 @@ PACKAGES="\
 	${UBUNTU:+android-sdk-libsparse-utils}                                                                        \
 	${UBUNTU:+lua5.2-dev}                                                                                             \
 	${UBUNTU:+lua5.2}                                                                                             \
-    	${UBUNTU:+python2-dev}                                                                                        \
     	${UBUNTU:+libfreetype6-dev}											\
     	${UBUNTU:+libid3tag0-dev}											\
     	${UBUNTU:+libmad0-dev}												\
