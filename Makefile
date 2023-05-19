@@ -50,10 +50,10 @@ default: libstb-hal neutrino
 NEUTRINO = neutrino-ddt
 N_BRANCH = master
 N_URL = https://github.com/Duckbox-Developers/neutrino-ddt.git
+N_PATCHES =
 HAL = libstb-hal-ddt
 HAL_BRANCH = master
 HAL_URL = https://github.com/Duckbox-Developers/libstb-hal-ddt.git
-N_PATCHES =
 HAL_PATCHES =	
 
 #
