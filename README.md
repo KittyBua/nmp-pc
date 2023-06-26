@@ -19,8 +19,7 @@ $:~ make libs
 
 step 2:
 ```bash
-$:~ make neutrino
-or make
+$:~ make
 ```
 
 * step 3:

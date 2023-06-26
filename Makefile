@@ -247,22 +247,17 @@ update:
 
 neutrino-clean:
 	-$(MAKE) -C $(N_OBJ) clean
-	rm -rf $(N_OBJ)
 
 libstb-hal-clean:
 	-$(MAKE) -C $(HAL_OBJ) clean
-	rm -rf $(HAL_OBJ)
 
 clean: neutrino-clean libstb-hal-clean
 
 neutrino-distclean:
-	rm -rf $(N_OBJ)
-	rm -rf $(N_SRC)
-	rm -rf $(SRC)/neutrino-plugin-scripts-lua
+	-$(MAKE) -C $(N_OBJ) distclean
 
 libstb-hal-distclean:
-	rm -rf $(HAL_OBJ)
-	rm -rf $(HAL_SRC)
+	-$(MAKE) -C $(HAL_OBJ) distclean
 	
 #
 # neutrino-plugins-scripts-lua
