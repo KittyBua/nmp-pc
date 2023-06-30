@@ -131,9 +131,6 @@ PACKAGES="\
     	${UBUNTU:+libvorbis-dev}											\
     	${UBUNTU:+libopenthreads-dev}											\
     	${UBUNTU:+libblkid-dev}												\
-    	${UBUNTU:+libgstreamer1.0-dev}											\
-    	${UBUNTU:+libgstreamer-plugins-base1.0-dev}									\
-    	${UBUNTU:+libgstreamer-plugins-bad1.0-dev}									\
     	${UBUNTU:+lua-json}												\
     	${UBUNTU:+lua-expat}												\
     	${UBUNTU:+lua-posix}												\

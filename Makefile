@@ -37,14 +37,11 @@
 # apt-get install libjpeg-dev
 # apt-get install libgif-dev
 # apt-get install libflac-dev
-# apt-get install libgstreamer1.0-dev
-# apt-get install libgstreamer-plugins-base1.0-dev
-# apt-get install libgstreamer-plugins-bad1.0-dev
 # apt-get install clutter-1.0
 # -----------------------------------------------------------------------------
 
 # first target is default...
-default: libstb-hal neutrino
+default: libstb-hal neutrino plugins-lua
 
 # ddt
 NEUTRINO = neutrino-ddt
@@ -117,8 +114,6 @@ CFLAGS += -DDYNAMIC_LUAPOSIX
 CFLAGS += -D__KERNEL_STRICT_NAMES
 CFLAGS += -D__STDC_FORMAT_MACROS
 CFLAGS += -D__STDC_CONSTANT_MACROS
-#CFLAGS += -DASSUME_MDEV
-#CFLAGS += -DTEST_MENU
 # enable --as-needed for catching more build problems...
 CFLAGS += -Wl,--as-needed
 
@@ -130,12 +125,6 @@ CFLAGS += -L$(DEST)/lib64
 # workaround for debian's non-std sigc++ locations
 CFLAGS += -I/usr/include/sigc++-2.0
 CFLAGS += -I/usr/lib/x86_64-linux-gnu/sigc++-2.0/include
-
-# gstreamer flags
-CFLAGS += -DENABLE_GSTREAMER_10
-CFLAGS += $(shell pkg-config --cflags --libs gstreamer-1.0)
-CFLAGS += $(shell pkg-config --cflags --libs gstreamer-audio-1.0)
-CFLAGS += $(shell pkg-config --cflags --libs gstreamer-video-1.0)
 
 PKG_CONFIG_PATH = $(DEST)/lib/pkgconfig
 export PKG_CONFIG_PATH
@@ -206,8 +195,7 @@ $(HAL_OBJ)/config.status: | $(HAL_OBJ) $(HAL_SRC)
 			--prefix=$(DEST) \
 			--with-boxtype=$(BOXMODEL) \
 			--enable-maintainer-mode \
-			--enable-shared=no \
-			--enable-gstreamer_10=yes
+			--enable-shared=no
 
 $(OBJ):
 	mkdir -p $(OBJ)
@@ -327,9 +315,10 @@ ffmpeg: $(SRC)/ffmpeg-$(FFMPEG_VER).tar.bz2 | $(DEST)
 		make install
 	rm -rf $(SRC)/ffmpeg-$(FFMPEG_VER)
 
-libs: lua ffmpeg libdvbsi
+libs: libdvbsi ffmpeg lua
 
 PHONY  = $(DEST)
 PHONY += checkout
 
 .PHONY: $(PHONY)
+
