@@ -180,6 +180,7 @@ $(N_OBJ)/config.status: | $(N_OBJ) $(N_SRC) libstb-hal
 			--enable-mdev \
 			--enable-giflib \
 			--enable-cleanup \
+			--enable-lua \
 			--with-target=native \
 			--with-boxtype=$(BOXMODEL) \
 			--with-stb-hal-includes=$(HAL_SRC)/include \
@@ -195,6 +196,7 @@ $(HAL_OBJ)/config.status: | $(HAL_OBJ) $(HAL_SRC)
 			--prefix=$(DEST) \
 			--with-boxtype=$(BOXMODEL) \
 			--enable-maintainer-mode \
+			--enable-clutter \
 			--enable-shared=no
 
 $(OBJ):
