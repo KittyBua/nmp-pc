@@ -1,4 +1,4 @@
-## quick guide to build neutrino-ddt for PC (x86) ##
+## quick guide to build Neutrino-DDT for PC (x86) ##
 
 ```bash
 $:~ git clone https://github.com/mohousch/nmp-pc.git
